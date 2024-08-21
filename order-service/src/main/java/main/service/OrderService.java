@@ -11,6 +11,7 @@ import main.dto.Payment;
 import main.dto.TransactionRequest;
 import main.dto.TransactionResponse;
 import main.repo.OrderRepo;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -23,7 +24,8 @@ import org.springframework.web.client.RestClient;
 @FieldDefaults(makeFinal=true,level=AccessLevel.PRIVATE)
 public class OrderService {
     OrderRepo repo;
-    RestClient client = RestClient.create("http://localhost:9191/api/payments");
+    @LoadBalanced
+    RestClient client = RestClient.create("http://payment-service/api/payments");
     
     public TransactionResponse saveOrder(TransactionRequest request){
         var order= request.order();
